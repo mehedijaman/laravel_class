@@ -21,7 +21,5 @@
 			break;
 	}
 
-	
-
 	include('views/footer.php');	
  ?>
