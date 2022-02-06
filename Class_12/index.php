@@ -14,6 +14,9 @@
 		case 'income':
 			include('views/income.php');
 			break;
+		case 'income_edit':
+			include('views/income_edit.php');
+			break;
 
 		case 'expense_category':
 			include('views/expense_category.php');
