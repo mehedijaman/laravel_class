@@ -17,6 +17,20 @@
 			}
 		}
 
+		public function connect()
+		{
+			$this->connection = new mysqli($this->host,$this->user,$this->pass, $this->db);
+
+			if($this->connection->connect_errno)
+			{
+				throw new exception('DB connection error ! Error code is :'.$this->connection->connect_errno);
+			}
+			else
+			{
+				return true;
+			}
+		}
+
 		public function close()
 		{
 			$this->conn->close();
