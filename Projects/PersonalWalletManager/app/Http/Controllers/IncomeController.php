@@ -16,7 +16,19 @@ class IncomeController extends Controller
     public function index()
     {
         $IncomeCategories  = IncomeCategory::all();
-        return view('income', compact('IncomeCategories'));
+        $Incomes = Income::select(
+            'incomes.id',
+            'income_categories.Name as CategoryName',
+            'incomes.Amount',
+            'incomes.Description',
+            'incomes.IncomeDate',
+            'incomes.created_at',
+            'incomes.updated_at'
+        )
+        ->leftJoin('income_categories','incomes.CategoryID','=','income_categories.id')  
+        ->get();
+
+        return view('income', compact('IncomeCategories','Incomes'));
     }
 
     /**
@@ -37,7 +49,17 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
-        Income::create($request->all());
+        // Income::create($request->all());
+
+        $Income = new Income();
+
+        $Income->CategoryID     = $request->CategoryID;
+        $Income->Amount         = $request->Amount;
+        $Income->Description    = $request->Description;
+        $Income->IncomeDate     = date('Y-m-d');
+
+        $Income->save();
+
         return back();
     }
 

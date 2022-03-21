@@ -32,16 +32,42 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="IncomeDate" class="control-label col-md-4">IncomeDate</label>
         <div class="col-md-4">
           <input type="date" class="form-control" name="IncomeDate">
         </div>
-      </div>
+      </div> -->
 
       <div class="form-group">
         <input type="submit" name="submit" value="Add Income" class="btn btn-primary">
       </div>
     {{ Form::close() }}
+
+    <table class="table table-responsive table-bordered table-stripped">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($Incomes as $Income)
+        <tr>
+          <td>{{ $Income->CategoryName }}</td>
+          <td>{{ $Income->IncomeDate }}</td>
+          <td>{{ $Income->Description }}</td>
+          <td>{{ $Income->Amount }}</td>
+          <td>
+            <a href="" class="btn btn-warning">Edit</a>
+            <a href="" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
   </main>
 @endsection
