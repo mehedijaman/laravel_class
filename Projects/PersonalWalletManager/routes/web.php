@@ -28,8 +28,25 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function(){
-    Route::get('income',[IncomeController::class,'index']);
-    Route::post('income/store',[IncomeController::class,'store']);
+
+    Route::get('income/{id}/delete',[IncomeController::class,'destroy']);
+    Route::get('income/delete',[IncomeController::class,'destroyAll']);
+    Route::get('income/trash',[IncomeController::class,'trash']);
+    Route::get('income/{id}/delete/parmanently',[IncomeController::class,'forceDelete']);
+    Route::get('/income/delete/parmanently',[IncomeController::class,'emptyTrash']);
+    Route::get('income/{id}/restore',[IncomeController::class,'restore']);
+
+    Route::get('income/restore',[IncomeController::class,'restoreAll']);
+
+    Route::resource('income',IncomeController::class);
+
+    
+
+    // Route::get('income',[IncomeController::class,'index']);
+    // Route::post('income/store',[IncomeController::class,'store']);
+    // Route::get('income/edit/{id}',[IncomeController::class,'edit']);
+    Route::post('income/update',[IncomeController::class,'update']);
+
     Route::get('income/category',[IncomeCategoryController::class,'index']);
     Route::post('income/category/store',[IncomeCategoryController::class,'store']);
     Route::get('expense',[ExpenseController::class,'index']);

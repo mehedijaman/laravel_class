@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Income;
 use App\Models\IncomeCategory;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class IncomeController extends Controller
 {
@@ -28,7 +29,7 @@ class IncomeController extends Controller
         ->leftJoin('income_categories','incomes.CategoryID','=','income_categories.id')  
         ->get();
 
-        return view('income', compact('IncomeCategories','Incomes'));
+        return view('income.index', compact('IncomeCategories','Incomes'));
     }
 
     /**
@@ -38,7 +39,8 @@ class IncomeController extends Controller
      */
     public function create()
     {
-        //
+        $IncomeCategories  = IncomeCategory::all();
+        return view('income.create',compact('IncomeCategories'));
     }
 
     /**
@@ -71,7 +73,7 @@ class IncomeController extends Controller
      */
     public function show(Income $income)
     {
-        //
+        return Income::find($income);
     }
 
     /**
@@ -82,7 +84,9 @@ class IncomeController extends Controller
      */
     public function edit(Income $income)
     {
-        //
+        $Income = Income::find($income)->first();
+        $IncomeCategories = IncomeCategory::all();
+        return view('income.edit',compact('Income','IncomeCategories'));
     }
 
     /**
@@ -92,9 +96,20 @@ class IncomeController extends Controller
      * @param  \App\Models\Income  $income
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Income $income)
+    public function update(Request $request)
     {
-        //
+       // Income::find($request->id)->update($request->all());
+        $Income = new Income();
+
+        $Income = Income::find($request->id);
+
+        $Income->CategoryID = $request->CategoryID;
+        $Income->Amount = $request->Amount;
+        $Income->Description = $request->Description;
+
+        $Income->save();
+        // $Income->update();
+       return back();
     }
 
     /**
@@ -103,8 +118,46 @@ class IncomeController extends Controller
      * @param  \App\Models\Income  $income
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Income $income)
+    public function destroy($id)
     {
-        //
+        Income::find($id)->delete();
+        return back();
+    }
+
+    public function destroyAll()
+    {
+        Income::withTrashed()->delete();
+        return back();
+    }
+
+    public function trash()
+    {
+        $TrashedIncomes = Income::onlyTrashed()->get();
+
+        return view('income.trash',compact('TrashedIncomes'));
+    }
+    public function forceDelete($id)
+    {
+        Income::withTrashed()->where('id',$id)->forceDelete();
+
+        return back();
+    }
+
+    public function restore($id)
+    {
+        Income::withTrashed()->where('id',$id)->restore();
+
+        return back();
+    }
+
+    public function restoreAll(){
+        Income::withTrashed()->restore();
+        return back();
+    }
+
+    public function emptyTrash()
+    {
+        Income::withTrashed()->forceDelete();
+        return back();
     }
 }
