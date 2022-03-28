@@ -6,6 +6,7 @@ use App\Models\Income;
 use App\Models\IncomeCategory;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class IncomeController extends Controller
 {
@@ -132,7 +133,14 @@ class IncomeController extends Controller
 
     public function trash()
     {
-        $TrashedIncomes = Income::onlyTrashed()->get();
+        $TrashedIncomes = DB::table('incomes')
+        ->select(
+            'incomes.*',
+            'income_categories.Name as Category',
+        )
+        ->leftJoin('income_categories','incomes.CategoryID','=','income_categories.id')
+        ->whereNotNull('deleted_at')
+        ->get();
 
         return view('income.trash',compact('TrashedIncomes'));
     }

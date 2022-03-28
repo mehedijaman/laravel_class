@@ -11,6 +11,7 @@
     <table class="table table-responsive table-bordered table-stripped">
       <thead>
         <tr>
+          <th>Category</th>
           <th>Date</th>
           <th>Description</th>
           <th>Amount</th>
@@ -20,7 +21,8 @@
       <tbody>
         @foreach($TrashedIncomes as $Income)
         <tr>
-          <td>{{ $Income->IncomeDates }}</td>
+          <td>{{ $Income->Category }}</td>
+          <td>{{ $Income->IncomeDate }}</td>
           <td>{{ $Income->Description }}</td>
           <td>{{ $Income->Amount }}</td>
           <td>
