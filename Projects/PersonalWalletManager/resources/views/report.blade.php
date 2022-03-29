@@ -5,6 +5,8 @@
         <h1 class="h2">Report</h1>
       </div>
 
-      Lorem ipsum, dolor sit amet, consectetur adipisicing elit. Voluptates necessitatibus molestiae a quae at, sit deserunt ea consequatur cupiditate accusamus similique aut, vitae ad quasi quaerat, fugiat, architecto eos fuga.
+      <a href="/report/income" class="btn btn-primary">Income Report</a>
+      <a href="/report/expense" class="btn btn-success">Expense Report</a>
+      <a href="/report/all" class="btn btn-info">All Report</a>
     </main>
 @endsection 

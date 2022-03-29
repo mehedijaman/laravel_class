@@ -53,6 +53,8 @@ Route::middleware('auth')->group(function(){
     Route::get('expense/category',[ExpenseCategoryController::class,'index']);
 
     Route::get('report',[ReportController::class,'index']);
+    Route::get('report/income',[ReportController::class,'incomeReport']);
+    Route::post('report/income',[ReportController::class,'printIncomeReport']);
 });
 
 

@@ -10,35 +10,69 @@ use App\Models\ExpenseCategory;
 
 class ReportController extends Controller
 {
-   public function incomeReport()
-   {
 
-   }
+    public function index()
+    {
+        return view('report');
+    }
 
-   public function expenseReport()
-   {
+    public function incomeReport()
+    {
+        $IncomeCategories = IncomeCategory::all();
+        return view('income.report.index',compact('IncomeCategories'));
+    }
 
-   }
+    public function generateIncomeReport($request)
+    {        
+        $Incomes = Income::select('incomes.*','income_categories.Name as Category')
+        ->leftJoin('income_categories','incomes.CategoryID','=','income_categories.id')
+        ->where('CategoryID',$request->CategoryID)
+        ->whereBetween('IncomeDate',[$request->DateFrom,$request->DateTo])
+        ->get();
 
-   public function report(Request $request)
-   {
-        $Incomes = Income::where()->get();
-        $TotalIncome = ;
+        return $Incomes;
+    }
 
-        $Expenses = Expense::where()->get();
-        $TotalExpense = ;
+    public function printIncomeReport(Request $request)
+    {
+        $Incomes = $this->generateIncomeReport($request);
+        $TotalIncome = $Incomes->sum('Amount');
 
-        $RestAmount = ;
+        return view('income.report.print',compact('Incomes','TotalIncome'));
+    }
 
-        $Data = 
-        [
-            'Incomes' => $Incomes,
-            'TotalIncome' => $TotalIncome,
-            'Expenses' => $Expenses,
-            'TotalExpense' => $TotalExpense,
-            'RestAmount' => $RestAmount, 
-        ];
+    public function generateExpenseReport($request)
+    {
+        $Expenses = Expense::select('expenses.*','expense_categories.Name as Category')
+        ->leftJoin('expense_categories','expenses.CategoryID','=','expense_categories.id')
+        ->where('CategoryID',$request->CategoryID)
+        ->whereBetween('ExpenseDate',[$request->DateFrom,$request->DateTo])
+        ->get();
 
-        return view('report',compact('Data'));
-   }
+        return $Expenses;
+    }
+
+    public function printExpenseReport(Request $request)
+    {
+        $Expense = $this->generateExpenseReport($request);
+        $TotalExpense = $Expenses->sum('Amount');
+
+        return view('expense.report.print',compact('Expenses','TotalExpense'));
+    }
+
+    public function printAllreport(Request $request)
+    {
+        $Incomes = $this->generateIncomeReport($request);
+        $TotalIncome = $Incomes->sum('Amount');
+
+        $Expenses = $this->generateExpenseReport($request);
+        $TotalExpense = $Expenses->sum('Amount');
+
+        return view('report_print.',compact(
+            'Incomes',
+            'TotalIncome',
+            'Expenses',
+            'TotalExpense'
+        ));
+    }
 }
