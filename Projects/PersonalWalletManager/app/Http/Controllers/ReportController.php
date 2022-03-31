@@ -23,12 +23,23 @@ class ReportController extends Controller
     }
 
     public function generateIncomeReport($request)
-    {        
+    {   
+        if (is_null($request->CategoryID)) 
+        {
+            $Incomes = Income::select('incomes.*','income_categories.Name as Category')
+            ->leftJoin('income_categories','incomes.CategoryID','=','income_categories.id')
+            ->whereBetween('IncomeDate',[$request->DateFrom,$request->DateTo])
+            ->get();
+
+            return $Incomes;
+        } 
+
         $Incomes = Income::select('incomes.*','income_categories.Name as Category')
         ->leftJoin('income_categories','incomes.CategoryID','=','income_categories.id')
         ->where('CategoryID',$request->CategoryID)
         ->whereBetween('IncomeDate',[$request->DateFrom,$request->DateTo])
         ->get();
+
 
         return $Incomes;
     }
@@ -43,6 +54,15 @@ class ReportController extends Controller
 
     public function generateExpenseReport($request)
     {
+        if (is_null($request->CategoryID)) {
+            $Expenses = Expense::select('expenses.*','expense_categories.Name as Category')
+            ->leftJoin('expense_categories','expenses.CategoryID','=','expense_categories.id')
+            ->whereBetween('ExpenseDate',[$request->DateFrom,$request->DateTo])
+            ->get();
+
+            return $Expenses;
+        }
+
         $Expenses = Expense::select('expenses.*','expense_categories.Name as Category')
         ->leftJoin('expense_categories','expenses.CategoryID','=','expense_categories.id')
         ->where('CategoryID',$request->CategoryID)
@@ -60,6 +80,11 @@ class ReportController extends Controller
         return view('expense.report.print',compact('Expenses','TotalExpense'));
     }
 
+    public function allReport()
+    {
+        return view('report_all');
+    }
+
     public function printAllreport(Request $request)
     {
         $Incomes = $this->generateIncomeReport($request);
@@ -68,7 +93,7 @@ class ReportController extends Controller
         $Expenses = $this->generateExpenseReport($request);
         $TotalExpense = $Expenses->sum('Amount');
 
-        return view('report_print.',compact(
+        return view('report_print',compact(
             'Incomes',
             'TotalIncome',
             'Expenses',

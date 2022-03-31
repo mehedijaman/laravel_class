@@ -27,6 +27,7 @@ class IncomeController extends Controller
             'incomes.created_at',
             'incomes.updated_at'
         )
+        ->where('created_by',auth()->user()->id)
         ->leftJoin('income_categories','incomes.CategoryID','=','income_categories.id')  
         ->get();
 
@@ -60,6 +61,7 @@ class IncomeController extends Controller
         $Income->Amount         = $request->Amount;
         $Income->Description    = $request->Description;
         $Income->IncomeDate     = date('Y-m-d');
+        $Income->created_by     = auth()->user()->id;
 
         $Income->save();
 
