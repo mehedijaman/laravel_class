@@ -7,9 +7,13 @@ use App\Models\IncomeCategory;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
+use Validation;
 
 class IncomeController extends Controller
 {
+    protected $ValidationRules = [
+        'Amount' => 'min:-2147483647|max:2147483647',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -53,9 +57,12 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->all();
         // Income::create($request->all());
 
         $Income = new Income();
+
+        $this->validate($request,$this->ValidationRules);
 
         $Income->CategoryID     = $request->CategoryID;
         $Income->Amount         = $request->Amount;
@@ -65,7 +72,8 @@ class IncomeController extends Controller
 
         $Income->save();
 
-        return back();
+        return true;
+        // return back();
     }
 
     /**

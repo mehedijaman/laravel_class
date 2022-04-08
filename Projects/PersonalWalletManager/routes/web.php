@@ -6,6 +6,7 @@ use App\Http\Controllers\IncomeCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\EmailController;
 
 
 /*
@@ -57,6 +58,8 @@ Route::middleware('auth')->group(function(){
     Route::post('report/all',[ReportController::class,'printAllreport']);
     Route::get('report/income',[ReportController::class,'incomeReport']);
     Route::post('report/income',[ReportController::class,'printIncomeReport']);
+
+    Route::get('email',[EmailController::class,'send']);
 });
 
 
