@@ -39,6 +39,13 @@
               Report
             </a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/profile/edit">
+              <span data-feather="user"></span>
+              Edit Profile
+            </a>
+          </li>
         </ul>
       </div>
     </nav>

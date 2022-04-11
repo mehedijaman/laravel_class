@@ -4,23 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Mail;
+use App\Mail\SendGreetings;
 
 class EmailController extends Controller
 {
-    public function send()
+    public function create()
     {
+        return view('emails.create');
+    }
+
+    public function send(Request $request)
+    {
+
+        return $request->all();
+
+        
         $Data = [
-            'Name' => 'Demo Name',
+            'Name' => 'Mehedi Jaman',
             'Email' => 'demo@demo.com',
             'Subject' => 'Demo Subject',
             'Message' => 'Demo Messasge',
         ];
 
-        Mail::send(['text' => 'mail'],$Data, function($Message){
-            $Message->to('mail4mjaman@gmail.com','Ferdawus')
-            ->subject('Message From Application')
-            ->from('info@demo.com');
-        });
+       
+
+        Mail::to('mail4mjaman@gmail.com')->send(new SendGreetings($Data));
 
         return "Email Send Done";
     }

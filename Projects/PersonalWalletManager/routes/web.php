@@ -7,6 +7,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\ProfileController;
 
 
 /*
@@ -59,7 +60,11 @@ Route::middleware('auth')->group(function(){
     Route::get('report/income',[ReportController::class,'incomeReport']);
     Route::post('report/income',[ReportController::class,'printIncomeReport']);
 
-    Route::get('email',[EmailController::class,'send']);
+    Route::get('email',[EmailController::class,'create']);
+    Route::post('email/send',[EmailController::class,'send']);
+
+    Route::get('profile/edit',[ProfileController::class,'edit']);
+    Route::post('profile/update',[ProfileController::class,'update']);
 });
 
 
