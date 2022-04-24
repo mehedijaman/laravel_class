@@ -8,6 +8,7 @@ use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 
 
 /*
@@ -65,6 +66,8 @@ Route::middleware('auth')->group(function(){
 
     Route::get('profile/edit',[ProfileController::class,'edit']);
     Route::post('profile/update',[ProfileController::class,'update']);
+
+    Route::post('search',[SearchController::class,'search']);
 });
 
 
